@@ -15,7 +15,7 @@ spring:
       port: 6379
       timeout: 200ms
   datasource:
-    url:
+    url: jdbc:h2:mem:messages
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -23,7 +23,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
-
 
 server:
   port: 8080

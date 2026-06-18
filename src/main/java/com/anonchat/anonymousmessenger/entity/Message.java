@@ -20,6 +20,7 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    String dialogId;
     String nickname;
     String content;
     Instant sentAt;
