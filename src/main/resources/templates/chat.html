@@ -1,0 +1,49 @@
+<!Doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <title>Document</title>
+    </head>
+
+    <body>
+        <h2>Диалог: <span th:text="${dialogId}"></span> </h2>
+
+        <div id="messages"></div>
+
+        <input id="message" placeholder="Сообщение..." />
+        <button onclick="sendMessage()">Отправить</button>
+
+        <script th:inline="javascript">
+            const dialogId = [[${dialogId}]];
+            const nickname = new URLSearchParams(window.location.search).get('nickname') || "Anon";
+
+            const socket = new SockJS('/ws');
+            const client = Stomp.over(socket);
+
+            client.connect({}, () => {
+                console.log("STOMP connected");
+                client.subscribe(`/topic/topic.${dialogId}`, msg => {
+                    const message = JSON.parse(msg.body);
+                    const div = document.createElement('div');
+                    div.textContent = `${message.nickname}: ${message.content}`;
+                    document.getElementById('messages').appendChild(div);
+                })
+            })
+
+            function sendMessage() {
+                const input = document.getElementById("message");
+                client.send('/app/send', {}, JSON.stringify({
+                    dialogId: dialogId,
+                    nickname: nickname,
+                    content: input.value
+                }));
+                input.value = '';
+            }
+        </script>
+    </body>
+</html>

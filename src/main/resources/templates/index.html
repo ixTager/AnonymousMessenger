@@ -1,0 +1,25 @@
+<!Doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body>
+        <h2>Войти в чат</h2>
+        <label for="nickname">
+            <input id="nickname" placeholder="Ваш ник" />
+        </label>
+        <button onclick="joinChat()">Войти</button>
+
+        <script>
+            function joinChat() {
+                const nick = document.getElementById("nickname").value;
+                const dialogId = crypto.randomUUID();
+                window.location.href = `chat/${dialogId}?nickname=${nick}`;
+            }
+        </script>
+    </body>
+</html>
