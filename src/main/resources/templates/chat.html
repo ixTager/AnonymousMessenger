@@ -20,7 +20,7 @@
 
         <script th:inline="javascript">
             const dialogId = [[${dialogId}]];
-            const nickname = new URLSearchParams(window.location.search).get('nickname') || "Anon";
+            const nickname = new URLSearchParams(window.location.search).get('nickname') || "Аноним";
 
             const socket = new SockJS('/ws');
             const client = Stomp.over(socket);

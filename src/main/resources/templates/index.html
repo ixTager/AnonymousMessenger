@@ -14,12 +14,23 @@
         </label>
         <button onclick="joinChat()">Войти</button>
 
+        <h3>Активные чаты:</h3>
+        <ul>
+            <li th:each="dialog : ${chats}">
+                <a th:href="@{/chat/{id}(id=${dialog.id})}">
+                    <span th:text="${dialog.creatorNickname}"></span>
+                    <span th:text="${dialog.lastMessage}"></span>
+                </a>
+            </li>
+        </ul>
+
         <script>
             function joinChat() {
-                const nick = document.getElementById("nickname").value;
+                const nick = document.getElementById("nickname").value || "Анон";
                 const dialogId = crypto.randomUUID();
                 window.location.href = `chat/${dialogId}?nickname=${nick}`;
             }
+
         </script>
     </body>
 </html>

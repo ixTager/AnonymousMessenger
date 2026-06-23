@@ -1,7 +1,6 @@
 package com.anonchat.anonymousmessenger.service;
 
 import com.anonchat.anonymousmessenger.entity.Message;
-import com.anonchat.anonymousmessenger.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class MessageCacheService {
-    private final MessageRepository messageRepository;
     private final RedisTemplate<String, Message> redis;
 
     private final static String CACHE_KEY_PREFIX = "dialog:messages:";
@@ -33,4 +31,10 @@ public class MessageCacheService {
         return redis.opsForList().range(cacheKey, 0, -1);
     }
 
+    public String getLastMessage(String dialogId) {
+        String cacheKey = CACHE_KEY_PREFIX + dialogId;
+        Message msg = redis.opsForList().getLast(cacheKey);
+        if (msg == null) { return ""; }
+        else return msg.getContent();
+    }
 }
